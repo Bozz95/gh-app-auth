@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gh-app-auth"
+version = "0.1.0"
+description = "GitHub App authentication CLI for CodeBuild"
+requires-python = ">=3.8"
+dependencies = [
+    "typer>=0.9.0",
+    "PyGithub>=2.1.1",
+    "PyJWT>=2.8.0",
+    "cryptography>=41.0.0"
+]
+
+[project.scripts]
+gh-app-auth = "gh_app_auth.cli:app"
+
+[tool.setuptools]
+packages = ["gh_app_auth"]
