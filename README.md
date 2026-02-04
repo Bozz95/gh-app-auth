@@ -86,7 +86,7 @@ GIT_MAIL=bot@example.com
 3. Run CodeBuild locally:
 
 ```bash
-./codebuild_build.sh -i aws/codebuild/amazonlinux-x86_64-standard:5.0 -a /tmp/artifacts -e test.env
+./codebuild_build.sh -i "public.ecr.aws/codebuild/amazonlinux-x86_64-standard:5.0" -a /tmp/artifacts -e test.env
 ```
 
 ### Buildspec Example
@@ -96,17 +96,23 @@ Replace manual authentication with the CLI:
 ```yaml
 pre_build:
   commands:
-    - pip install -e .
-    - echo "$GITHUB_APP_PRIVATE_KEY" > private-key.pem
-    - |
-      REPO_URL=$(gh-app-auth configure-git \
-        --app-id $GITHUB_APP_ID \
-        --installation-id $GITHUB_APP_INSTALL_ID \
-        --private-key private-key.pem \
-        --repo-owner $GITOPS_REPO_OWNER \
-        --repo-name $GITOPS_REPO_NAME)
-    - git config --global user.email "$GIT_MAIL"
-    - git config --global user.name "$GIT_USERNAME"
+      - pip install https://github.com/Longwave-innovation/gh-app-auth/releases/download/v0.2.0/gh_app_auth-0.2.0-py3-none-any.whl
+      
+      - echo "Saving private key into .pem file..."
+      - echo "$GITHUB_APP_PRIVATE_KEY" > private_key.pem
+      
+      - echo "Getting authenticated clone URL..."
+      - |
+        REPO_URL=$(gh-app-auth configure-git \
+          --app-id $GITHUB_APP_ID \
+          --installation-id $GITHUB_APP_INSTALL_ID \
+          --private-key private_key.pem \
+          --repo-owner $GITOPS_REPO_OWNER \
+          --repo-name $GITOPS_REPO_NAME)
+      
+      - echo "Configuring Git..."
+      - git config --global user.email "$GIT_MAIL"
+      - git config --global user.name "$GIT_USERNAME"
 
 build:
   commands:

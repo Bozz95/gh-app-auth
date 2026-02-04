@@ -11,12 +11,13 @@ phases:
       - echo 'Pre_build_phase'
       - echo 'Installing gh-app-auth CLI...'
       # - pip install uv
-      # - uv sync
-      - pip install dist/gh_app_auth-0.1.0-py3-none-any.whl
+      # local testing with freshly build
+      # - pip install dist/gh_app_auth-0.2.0-py3-none-any.whl
+      # Getting the package from Github directly
+      - pip install https://github.com/Longwave-innovation/gh-app-auth/releases/download/v0.2.0/gh_app_auth-0.2.0-py3-none-any.whl
       
       - echo "Saving private key into .pem file..."
-      # - echo "$GITHUB_APP_PRIVATE_KEY" > private_key.pem
-      - more private_key.pem
+      - echo "$GITHUB_APP_PRIVATE_KEY" > private_key.pem
       
       - echo "Getting authenticated clone URL..."
       - |
